@@ -15,7 +15,7 @@ pub const GameState = struct {
         var lasers = std.ArrayList(Laser).init(allocator);
         errdefer lasers.deinit();
 
-        try lasers.append(Laser.init(.enemy));
+        try lasers.append(Laser.init(.enemy, zlm.Vec2.new(50.0, 50.0)));
 
         return GameState{
             .player = Player.init(),
@@ -34,6 +34,15 @@ fn update(gs: *GameState, dt: f32) void {
 
     for (gs.lasers.items) |*laser| {
         laser.update(gs, dt);
+    }
+
+    var i: usize = 0;
+    while (i < gs.lasers.items.len) {
+        if (gs.lasers.items[i].to_delete) {
+            _ = gs.lasers.orderedRemove(i);
+        } else {
+            i += 1;
+        }
     }
 }
 

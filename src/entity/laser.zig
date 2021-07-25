@@ -19,9 +19,9 @@ pub const Laser = struct {
     const dim = Vec2.new(4, 25);
     const speed = 300.0;
 
-    pub fn init(kind: Kind) Laser {
+    pub fn init(kind: Kind, pos: Vec2) Laser {
         return Laser{
-            .pos = Vec2.new(50.0, 50.0),
+            .pos = pos,
             .vel = Vec2.new(0.0, if (kind == .enemy) speed else -speed),
             .kind = kind,
             .to_delete = false,
