@@ -1,4 +1,5 @@
 const std = @import("std");
+const zlm = @import("zlm");
 const c = @import("c.zig");
 
 fn update(dt: f32) void {
@@ -13,7 +14,7 @@ fn draw() void {
 pub fn main() !void {
     // Enable VSync to lower CPU usage.
     c.SetConfigFlags(c.FLAG_VSYNC_HINT);
-    c.InitWindow(800, 450, "gallygally");
+    c.InitWindow(640, 480, "gallygally");
     defer c.CloseWindow();
 
     while (!c.WindowShouldClose()) {

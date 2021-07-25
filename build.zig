@@ -17,6 +17,8 @@ pub fn build(b: *Builder) void {
     exe.addLibPath("lib");
     exe.linkSystemLibrary("raylibdll");
 
+    exe.addPackagePath("zlm", "pkg/zlm/zlm.zig");
+
     const dll_copy = DllCopyStep.create(b);
     b.default_step.dependOn(&dll_copy.step);
     if (exe.install_step) |install_step| {
