@@ -4,30 +4,46 @@ const c = @import("c.zig");
 
 const Allocator = std.mem.Allocator;
 const Player = @import("entities/player.zig").Player;
+const Laser = @import("entities/laser.zig").Laser;
 
 pub const GameState = struct {
     player: Player,
+    lasers: std.ArrayList(Laser),
     allocator: *Allocator,
-    
-    pub fn init(allocator: *Allocator) GameState {
+
+    pub fn init(allocator: *Allocator) !GameState {
+        var lasers = std.ArrayList(Laser).init(allocator);
+        errdefer lasers.deinit();
+
+        try lasers.append(Laser.init(.enemy));
+
         return GameState{
             .player = Player.init(),
+            .lasers = lasers,
             .allocator = allocator,
         };
     }
 
     pub fn deinit(self: GameState) void {
-        _ = self;
+        self.lasers.deinit();
     }
 };
 
 fn update(gs: *GameState, dt: f32) void {
     gs.player.update(gs, dt);
+
+    for (gs.lasers.items) |*laser| {
+        laser.update(gs, dt);
+    }
 }
 
 fn draw(gs: *const GameState) void {
     c.ClearBackground(c.DARKGRAY);
     gs.player.draw(gs);
+
+    for (gs.lasers.items) |laser| {
+        laser.draw(gs);
+    }
 }
 
 pub fn main() !void {
@@ -40,7 +56,7 @@ pub fn main() !void {
     c.InitWindow(640, 480, "gallygally");
     defer c.CloseWindow();
 
-    var gs = GameState.init(allocator);
+    var gs = try GameState.init(allocator);
     defer gs.deinit();
 
     while (!c.WindowShouldClose()) {
