@@ -3,8 +3,8 @@ const zlm = @import("zlm");
 const c = @import("c.zig");
 
 const Allocator = std.mem.Allocator;
-const Player = @import("entities/player.zig").Player;
-const Laser = @import("entities/laser.zig").Laser;
+const Player = @import("entity/player.zig").Player;
+const Laser = @import("entity/laser.zig").Laser;
 
 pub const GameState = struct {
     player: Player,
